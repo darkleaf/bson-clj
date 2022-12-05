@@ -1,0 +1,2 @@
+{:deps    {org.mongodb/mongodb-driver-sync {:mvn/version "4.8.0"}}
+ :aliases {:dev {:extra-paths ["test"]}}}
