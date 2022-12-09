@@ -20,17 +20,7 @@
    (org.bson.codecs.jsr310
     Jsr310CodecProvider)))
 
-
-
-
 (set! *warn-on-reflection* true)
-
-#_(ns example.persistent-map-provider
-    (:import
-     (org.bson Transformer BsonType UuidRepresentation)
-     (org.bson.codecs Codec BsonTypeClassMap BsonTypeCodecMap ContainerCodecHelper)
-
-     (clojure.lang IPersistentMap)))
 
 ;; todo: ratio
 (defn ^BsonTypeClassMap bson-type-class-map []
