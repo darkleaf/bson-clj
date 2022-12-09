@@ -5,7 +5,7 @@
    (org.bson.codecs Codec BsonTypeClassMap BsonTypeCodecMap)
    (org.bson BsonType)
 
-   (clojure.lang IPersistentMap Seqable)
+   (clojure.lang IPersistentMap Sequential)
    (java.util Map)
 
    (org.bson.codecs
@@ -35,7 +35,7 @@
 (defn ^BsonTypeClassMap bson-type-class-map []
   (BsonTypeClassMap.
    (Map/of BsonType/DOCUMENT IPersistentMap
-           BsonType/ARRAY Seqable)))
+           BsonType/ARRAY Sequential)))
 
 (defn persistent-map []
   (let [bsonTypeClassMap (bson-type-class-map)]
@@ -78,7 +78,7 @@
     (reify CodecProvider
       (get [_ clazz registry]
         (let [bsonTypeCodecMap (BsonTypeCodecMap. bsonTypeClassMap registry)]
-          (when (.isAssignableFrom Seqable clazz)
+          (when (.isAssignableFrom Sequential clazz)
             (reify Codec
               (getEncoderClass [_]
                 clazz)
