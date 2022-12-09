@@ -32,6 +32,7 @@
                               (bson-read (class v) registry))))
       {}
       {:foo true}
+      {:foo/bar true}
       {:foo "bar"}
       {:foo 1}
       {:foo 0.1}

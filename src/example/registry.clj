@@ -49,7 +49,7 @@
               (encode [_ writer obj encoderContext]
                 (.writeStartDocument writer)
                 (doseq [[k v] obj]
-                  (.writeName writer (name k))
+                  (.writeName writer (-> k symbol str))
                   (if (nil? v)
                     (.writeNull writer)
                     (let [codec (.get registry (class v))]
