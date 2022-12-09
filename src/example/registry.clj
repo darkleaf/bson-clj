@@ -2,8 +2,8 @@
   (:import
    (org.bson.codecs.configuration CodecRegistry CodecRegistries)
    (org.bson.codecs.configuration CodecProvider)
-   (org.bson.codecs Codec BsonTypeClassMap BsonTypeCodecMap)
-   (org.bson BsonType)
+   (org.bson.codecs Codec BsonTypeClassMap BsonTypeCodecMap DecoderContext)
+   (org.bson BsonType BsonReader)
 
    (clojure.lang IPersistentMap Sequential)
    (java.util Map)
@@ -37,6 +37,18 @@
    (Map/of BsonType/DOCUMENT IPersistentMap
            BsonType/ARRAY Sequential)))
 
+(defn- read-value [^BsonReader reader
+                   ^BsonTypeCodecMap bsonTypeCodecMap
+                   ^DecoderContext decoderContext]
+  (let [bsonType  (.getCurrentBsonType reader)]
+    (if (= bsonType BsonType/NULL)
+      (do
+        (.readNull reader)
+        nil)
+      (let [codec (.get bsonTypeCodecMap bsonType)
+            value (.decode codec reader decoderContext)]
+        value))))
+
 (defn persistent-map []
   (let [bsonTypeClassMap (bson-type-class-map)]
     (reify CodecProvider
@@ -61,14 +73,8 @@
                   (while (not= (.readBsonType reader)
                                BsonType/END_OF_DOCUMENT)
                     (let [fieldName (keyword (.readName reader))
-                          bsonType  (.getCurrentBsonType reader)]
-                      (if (= bsonType BsonType/NULL)
-                        (do
-                          (.readNull reader)
-                          (assoc! m fieldName nil))
-                        (let [codec (.get bsonTypeCodecMap bsonType)
-                              value (.decode codec reader decoderContext)]
-                          (assoc! m fieldName value)))))
+                          value     (read-value reader bsonTypeCodecMap decoderContext)]
+                      (assoc! m fieldName value)))
                   (.readEndDocument reader)
                   (persistent! m))))))))))
 
@@ -95,14 +101,8 @@
                 (let [v (transient [])]
                   (while (not= (.readBsonType reader)
                                BsonType/END_OF_DOCUMENT)
-                    (let [bsonType (.getCurrentBsonType reader)]
-                      (if (= bsonType BsonType/NULL)
-                        (do
-                          (.readNull reader)
-                          (conj! v nil))
-                        (let [codec (.get bsonTypeCodecMap bsonType)
-                              value (.decode codec reader decoderContext)]
-                          (conj! v value)))))
+                    (let [value (read-value reader bsonTypeCodecMap decoderContext)]
+                      (conj! v value)))
                   (.readEndArray reader)
                   (persistent! v))))))))))
 
