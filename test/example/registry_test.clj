@@ -25,6 +25,8 @@
         codec (.get registry class)]
     (.decode codec r ctx)))
 
+(defrecord Test [a b])
+
 (t/deftest roundtrip
   (let [registry (sut/registry)]
     (t/are [v] (t/is (= v (-> v
@@ -44,5 +46,6 @@
       {:foo (list)}
       {:foo (list 1 2 3)}
 
+      (->Test 1 2)
 
       #_{:foo 1/2})))

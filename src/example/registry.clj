@@ -6,7 +6,7 @@
                     EncoderContext DecoderContext)
    (org.bson BsonType BsonWriter BsonReader)
 
-   (clojure.lang IPersistentMap Sequential)
+   (clojure.lang IPersistentMap Sequential IRecord)
    (java.util Map)
 
    (org.bson.codecs
@@ -59,7 +59,7 @@
   (= (.readBsonType reader)
      BsonType/END_OF_DOCUMENT))
 
-(defn persistent-map []
+(defn ^CodecProvider persistent-map []
   (let [bsonTypeClassMap (bson-type-class-map)]
     (reify CodecProvider
       (get [_ clazz registry]
@@ -88,7 +88,7 @@
                           acc        (assoc! acc field-name value)]
                       (recur acc))))))))))))
 
-(defn persistent-vector []
+(defn ^CodecProvider persistent-vector []
   (let [bsonTypeClassMap (bson-type-class-map)]
     (reify CodecProvider
       (get [_ clazz registry]
@@ -115,10 +115,31 @@
                           acc (conj! acc value)]
                       (recur acc))))))))))))
 
+(defn- map->record [^Class class ^IPersistentMap map]
+  (.. class
+      (getMethod "create" (into-array [IPersistentMap]))
+      (invoke nil (into-array [map]))))
+
+(defn ^CodecProvider record []
+  (let [map-provider (persistent-map)]
+    (reify CodecProvider
+      (get [_ clazz registry]
+        (let [map-codec (.get map-provider IPersistentMap registry)]
+          (when (.isAssignableFrom IRecord clazz)
+            (reify Codec
+              (getEncoderClass [_]
+                clazz)
+              (encode [_ writer obj encoderContext]
+                (.encode map-codec writer obj encoderContext))
+              (decode [_ reader decoderContext]
+                (let [m (.decode map-codec reader decoderContext)]
+                  (map->record clazz m))))))))))
+
 
 (def ^java.util.List providers
   [(ValueCodecProvider.)
    #_(BsonValueCodecProvider.)
+   (record)
    (persistent-map)
    (persistent-vector)
 
