@@ -14,7 +14,7 @@
    (org.bson.types Binary)
    (org.bson.conversions Bson)
    (java.time Instant)
-   (java.util Map)))
+   (java.util Map List)))
 
 (set! *warn-on-reflection* true)
 
@@ -74,6 +74,9 @@
 
       {:foo (Map/of "bar" "buzz")}
       {:foo {:bar "buzz"}}
+
+      {:foo (List/of 1 2 3)}
+      {:foo [1 2 3]}
 
       (JsonObject. "{\"foo\": \"bar\"}")
       {:foo "bar"}

@@ -13,7 +13,6 @@
    (org.bson.codecs
     ValueCodecProvider
     BsonValueCodecProvider
-    CollectionCodecProvider
     IterableCodecProvider
     MapCodecProvider
     JsonObjectCodecProvider
@@ -146,6 +145,8 @@
    (Jsr310CodecProvider.)
 
    (MapCodecProvider.)
+   (IterableCodecProvider.)
+
    (JsonObjectCodecProvider.)
    (BsonCodecProvider.)])
 
