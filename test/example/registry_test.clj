@@ -7,7 +7,8 @@
    (org.bson.io BasicOutputBuffer)
    (org.bson.codecs EncoderContext DecoderContext)
    (org.bson.codecs.configuration CodecRegistry)
-   (java.nio ByteBuffer)))
+   (java.nio ByteBuffer)
+   (java.time Instant)))
 
 (set! *warn-on-reflection* true)
 
@@ -45,7 +46,7 @@
       {:foo [{:a 2}]}
       {:foo (list)}
       {:foo (list 1 2 3)}
-
+      {:foo (Instant/parse "2022-12-10T16:31:00Z")}
       (->Test 1 2)
 
       #_{:foo 1/2})))
