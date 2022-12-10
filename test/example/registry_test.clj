@@ -58,8 +58,6 @@
       {:foo (Binary. bar-bytes)}
       (->Test 1 2))))
 
-
-
 (t/deftest roundtip-changing-type
   (let [registry (sut/registry)]
     (t/are [from to] (t/is (= to (-> from
