@@ -147,7 +147,7 @@
    (Jsr310CodecProvider.)
 
    (MapCodecProvider.)
-   #_(JsonObjectCodecProvider.)
+   (JsonObjectCodecProvider.)
    #_(BsonCodecProvider.)])
 
 (defn ^CodecRegistry registry []

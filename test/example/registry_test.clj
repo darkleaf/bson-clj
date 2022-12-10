@@ -9,6 +9,7 @@
    (org.bson.codecs.configuration CodecRegistry)
    (java.nio ByteBuffer)
 
+   (org.bson.json JsonObject)
    (org.bson.types Binary)
    (java.time Instant)
    (java.util Map)))
@@ -64,4 +65,7 @@
       {:bar "buzz"}
 
       {:foo (Map/of "bar" "buzz")}
-      {:foo {:bar "buzz"}})))
+      {:foo {:bar "buzz"}}
+
+      (JsonObject. "{\"foo\": \"bar\"}")
+      {:foo "bar"})))
