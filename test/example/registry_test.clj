@@ -9,8 +9,10 @@
    (org.bson.codecs.configuration CodecRegistry)
    (java.nio ByteBuffer)
 
+   (org.bson Document BsonDocument BsonBinary)
    (org.bson.json JsonObject)
    (org.bson.types Binary)
+   (org.bson.conversions Bson)
    (java.time Instant)
    (java.util Map)))
 
@@ -32,6 +34,8 @@
 
 (defrecord Test [a b])
 
+(def ^{:tag 'bytes} bar-bytes (.getBytes "bar"))
+
 (t/deftest roundtrip
   (let [registry (sut/registry)]
     (t/are [v] (t/is (= v (-> v
@@ -51,7 +55,7 @@
       {:foo (list)}
       {:foo (list 1 2 3)}
       {:foo (Instant/parse "2022-12-10T16:31:00Z")}
-      {:foo (-> "bar" .getBytes Binary.)}
+      {:foo (Binary. bar-bytes)}
       (->Test 1 2)
 
       #_{:foo 1/2})))
@@ -68,4 +72,15 @@
       {:foo {:bar "buzz"}}
 
       (JsonObject. "{\"foo\": \"bar\"}")
-      {:foo "bar"})))
+      {:foo "bar"}
+
+      (Document. "foo" "bar")
+      {:foo "bar"}
+
+      (BsonDocument. "foo" (BsonBinary. bar-bytes))
+      {:foo (Binary. bar-bytes)}
+
+      (reify Bson
+        (toBsonDocument [_ _ _]
+          (BsonDocument. "foo" (BsonBinary. bar-bytes))))
+      {:foo (Binary. bar-bytes)})))

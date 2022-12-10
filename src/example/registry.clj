@@ -148,7 +148,7 @@
 
    (MapCodecProvider.)
    (JsonObjectCodecProvider.)
-   #_(BsonCodecProvider.)])
+   (BsonCodecProvider.)])
 
 (defn ^CodecRegistry registry []
   (CodecRegistries/fromProviders providers))
