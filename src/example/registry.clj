@@ -140,18 +140,13 @@
 
 (def ^java.util.List providers
   [(ValueCodecProvider.)
-   #_(BsonValueCodecProvider.)
+   (BsonValueCodecProvider.)
    (record)
    (persistent-map)
    (persistent-vector)
-
+   (Jsr310CodecProvider.)
 
    #_(MapCodecProvider.)
-
-   #_(pm-provider/->PersistentMapCodecProvider (BsonTypeClassMap.))
-   #_(CollectionCodecProvider.)
-   #_(IterableCodecProvider.)
-   (Jsr310CodecProvider.)
    #_(JsonObjectCodecProvider.)
    #_(BsonCodecProvider.)])
 

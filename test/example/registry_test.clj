@@ -8,6 +8,8 @@
    (org.bson.codecs EncoderContext DecoderContext)
    (org.bson.codecs.configuration CodecRegistry)
    (java.nio ByteBuffer)
+
+   (org.bson.types Binary)
    (java.time Instant)))
 
 (set! *warn-on-reflection* true)
@@ -47,6 +49,7 @@
       {:foo (list)}
       {:foo (list 1 2 3)}
       {:foo (Instant/parse "2022-12-10T16:31:00Z")}
+      {:foo (-> "bar" .getBytes Binary.)}
       (->Test 1 2)
 
       #_{:foo 1/2})))
