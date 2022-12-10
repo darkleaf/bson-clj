@@ -7,7 +7,6 @@
    (org.bson BsonType BsonWriter BsonReader)
 
    (clojure.lang IPersistentMap Sequential IRecord)
-   (java.util Map)
    (java.time Instant)
 
    (org.bson.codecs
@@ -24,9 +23,9 @@
 
 (defn ^BsonTypeClassMap bson-type-class-map []
   (BsonTypeClassMap.
-   (Map/of BsonType/DOCUMENT IPersistentMap
-           BsonType/ARRAY Sequential
-           BsonType/DATE_TIME Instant)))
+   {BsonType/DOCUMENT  IPersistentMap
+    BsonType/ARRAY     Sequential
+    BsonType/DATE_TIME Instant}))
 
 (defn- write-value [^BsonWriter writer
                     ^CodecRegistry registry
