@@ -10,7 +10,8 @@
    (java.nio ByteBuffer)
 
    (org.bson.types Binary)
-   (java.time Instant)))
+   (java.time Instant)
+   (java.util Map)))
 
 (set! *warn-on-reflection* true)
 
@@ -53,3 +54,14 @@
       (->Test 1 2)
 
       #_{:foo 1/2})))
+
+(t/deftest roundtip-changing-type
+  (let [registry (sut/registry)]
+    (t/are [from to] (t/is (= to (-> from
+                                     (bson-write registry)
+                                     (bson-read (class to) registry))))
+      (Map/of "bar" "buzz")
+      {:bar "buzz"}
+
+      {:foo (Map/of "bar" "buzz")}
+      {:foo {:bar "buzz"}})))

@@ -146,7 +146,7 @@
    (persistent-vector)
    (Jsr310CodecProvider.)
 
-   #_(MapCodecProvider.)
+   (MapCodecProvider.)
    #_(JsonObjectCodecProvider.)
    #_(BsonCodecProvider.)])
 
