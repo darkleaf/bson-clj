@@ -6,14 +6,13 @@
                     EncoderContext DecoderContext)
    (org.bson BsonType BsonWriter BsonReader)
 
-   (clojure.lang IPersistentMap Sequential IRecord)
+   (clojure.lang IRecord IPersistentMap)
    (java.time Instant)
+   (java.util Map)
 
    (org.bson.codecs
     ValueCodecProvider
     BsonValueCodecProvider
-    IterableCodecProvider
-    MapCodecProvider
     JsonObjectCodecProvider
     BsonCodecProvider)
    (org.bson.codecs.jsr310
@@ -23,8 +22,8 @@
 
 (defn ^BsonTypeClassMap bson-type-class-map []
   (BsonTypeClassMap.
-   {BsonType/DOCUMENT  IPersistentMap
-    BsonType/ARRAY     Sequential
+   {BsonType/DOCUMENT  Map
+    BsonType/ARRAY     Iterable
     BsonType/DATE_TIME Instant}))
 
 (defn- write-value [^BsonWriter writer
@@ -63,7 +62,7 @@
     (reify CodecProvider
       (get [_ clazz registry]
         (let [bsonTypeCodecMap (BsonTypeCodecMap. bsonTypeClassMap registry)]
-          (when (.isAssignableFrom IPersistentMap clazz)
+          (when (.isAssignableFrom Map clazz)
             (reify Codec
               (getEncoderClass [_]
                 clazz)
@@ -92,7 +91,7 @@
     (reify CodecProvider
       (get [_ clazz registry]
         (let [bsonTypeCodecMap (BsonTypeCodecMap. bsonTypeClassMap registry)]
-          (when (.isAssignableFrom Sequential clazz)
+          (when (.isAssignableFrom Iterable clazz)
             (reify Codec
               (getEncoderClass [_]
                 clazz)
@@ -123,7 +122,7 @@
   (let [map-provider (persistent-map)]
     (reify CodecProvider
       (get [_ clazz registry]
-        (let [map-codec (.get map-provider IPersistentMap registry)]
+        (let [map-codec (.get map-provider Map registry)]
           (when (.isAssignableFrom IRecord clazz)
             (reify Codec
               (getEncoderClass [_]
@@ -141,9 +140,6 @@
    (record)
    (persistent-map)
    (persistent-vector)
-
-   (MapCodecProvider.)
-   (IterableCodecProvider.)
 
    (JsonObjectCodecProvider.)
    (BsonValueCodecProvider.)
