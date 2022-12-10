@@ -108,9 +108,9 @@
                       (.readEndArray reader)
                       (persistent! acc))
                     (let [value (read-value reader
-                                         bsonTypeCodecMap
-                                         decoderContext)
-                          acc (conj! acc value)]
+                                            bsonTypeCodecMap
+                                            decoderContext)
+                          acc   (conj! acc value)]
                       (recur acc))))))))))))
 
 (defn- map->record [^Class class ^IPersistentMap map]
