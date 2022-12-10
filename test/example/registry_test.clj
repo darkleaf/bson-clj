@@ -11,7 +11,7 @@
 
    (org.bson Document BsonDocument BsonBinary)
    (org.bson.json JsonObject)
-   (org.bson.types Binary)
+   (org.bson.types ObjectId Binary)
    (org.bson.conversions Bson)
    (java.time Instant)
    (java.util Map List)))
@@ -38,9 +38,10 @@
 
 (t/deftest roundtrip
   (let [registry (sut/registry)]
-    (t/are [v] (t/is (= v (-> v
-                              (bson-write registry)
-                              (bson-read (class v) registry))))
+    (t/are [v] (let [v# v]
+                 (t/is (= v# (-> v#
+                                 (bson-write registry)
+                                 (bson-read (class v#) registry)))))
       {}
       {:foo true}
       {:foo/bar true}
@@ -56,6 +57,7 @@
       {:foo (list 1 2 3)}
       {:foo (Instant/parse "2022-12-10T16:31:00Z")}
       {:foo (Binary. bar-bytes)}
+      {:foo (ObjectId/get)}
       (->Test 1 2))))
 
 (t/deftest roundtip-changing-type
