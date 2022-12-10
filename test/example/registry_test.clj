@@ -82,9 +82,11 @@
       (Document. "foo" "bar")
       {:foo "bar"}
 
+      ;; BsonValueCodec
       (BsonDocument. "foo" (BsonBinary. bar-bytes))
       {:foo (Binary. bar-bytes)}
 
+      ;; BsonCodec
       (reify Bson
         (toBsonDocument [_ _ _]
           (BsonDocument. "foo" (BsonBinary. bar-bytes))))

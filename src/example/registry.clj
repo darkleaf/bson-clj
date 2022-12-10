@@ -135,19 +135,19 @@
                 (let [m (.decode map-codec reader decoderContext)]
                   (map->record clazz m))))))))))
 
-
 (def ^java.util.List providers
   [(ValueCodecProvider.)
-   (BsonValueCodecProvider.)
+   (Jsr310CodecProvider.)
+
    (record)
    (persistent-map)
    (persistent-vector)
-   (Jsr310CodecProvider.)
 
    (MapCodecProvider.)
    (IterableCodecProvider.)
 
    (JsonObjectCodecProvider.)
+   (BsonValueCodecProvider.)
    (BsonCodecProvider.)])
 
 (defn ^CodecRegistry registry []
