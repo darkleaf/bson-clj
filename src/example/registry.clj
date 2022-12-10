@@ -23,7 +23,6 @@
 
 (set! *warn-on-reflection* true)
 
-;; todo: ratio
 (defn ^BsonTypeClassMap bson-type-class-map []
   (BsonTypeClassMap.
    (Map/of BsonType/DOCUMENT IPersistentMap

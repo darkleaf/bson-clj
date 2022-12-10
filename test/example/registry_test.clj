@@ -56,15 +56,19 @@
       {:foo (list 1 2 3)}
       {:foo (Instant/parse "2022-12-10T16:31:00Z")}
       {:foo (Binary. bar-bytes)}
-      (->Test 1 2)
+      (->Test 1 2))))
 
-      #_{:foo 1/2})))
+
 
 (t/deftest roundtip-changing-type
   (let [registry (sut/registry)]
     (t/are [from to] (t/is (= to (-> from
                                      (bson-write registry)
                                      (bson-read (class to) registry))))
+      #_#_
+      {:foo 1/2}
+      {:foo 0.5}
+
       (Map/of "bar" "buzz")
       {:bar "buzz"}
 
