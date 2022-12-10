@@ -133,7 +133,7 @@
                 (let [m (.decode map-codec reader decoderContext)]
                   (map->record clazz m))))))))))
 
-(def ^java.util.List providers
+(defn ^java.util.List providers []
   [(ValueCodecProvider.)
    (Jsr310CodecProvider.)
 
@@ -146,4 +146,4 @@
    (BsonCodecProvider.)])
 
 (defn ^CodecRegistry registry []
-  (CodecRegistries/fromProviders providers))
+  (CodecRegistries/fromProviders (providers)))
