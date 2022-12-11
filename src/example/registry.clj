@@ -119,19 +119,18 @@
       (invoke nil (into-array [map]))))
 
 (defn ^CodecProvider record []
-  (let [map-provider (persistent-map)]
-    (reify CodecProvider
-      (get [_ clazz registry]
-        (let [map-codec (.get map-provider Map registry)]
-          (when (.isAssignableFrom IRecord clazz)
-            (reify Codec
-              (getEncoderClass [_]
-                clazz)
-              (encode [_ writer obj encoderContext]
-                (.encode map-codec writer obj encoderContext))
-              (decode [_ reader decoderContext]
-                (let [m (.decode map-codec reader decoderContext)]
-                  (map->record clazz m))))))))))
+  (reify CodecProvider
+    (get [_ clazz registry]
+      (let [map-codec (.get registry Map)]
+        (when (.isAssignableFrom IRecord clazz)
+          (reify Codec
+            (getEncoderClass [_]
+              clazz)
+            (encode [_ writer obj encoderContext]
+              (.encode map-codec writer obj encoderContext))
+            (decode [_ reader decoderContext]
+              (let [m (.decode map-codec reader decoderContext)]
+                (map->record clazz m)))))))))
 
 (defn ^java.util.List providers []
   [(ValueCodecProvider.)
