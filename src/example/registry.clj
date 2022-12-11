@@ -147,3 +147,11 @@
 
 (defn ^CodecRegistry registry []
   (CodecRegistries/fromProviders (providers)))
+
+
+
+(comment
+  (registry (fn [bson-type key]
+              clojure.lang.Keyword))
+  {BsonType/DATE_TIME Instant
+   :type             clojure.lang.Keyword})
