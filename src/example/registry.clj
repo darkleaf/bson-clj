@@ -20,7 +20,7 @@
 
 (set! *warn-on-reflection* true)
 
-(defn ^BsonTypeClassMap bson-type-class-map []
+(defn- ^BsonTypeClassMap bson-type-class-map []
   (BsonTypeClassMap.
    {BsonType/DOCUMENT  Map
     BsonType/ARRAY     Iterable
@@ -57,7 +57,7 @@
   (= (.readBsonType reader)
      BsonType/END_OF_DOCUMENT))
 
-(defn ^CodecProvider persistent-map []
+(defn- ^CodecProvider persistent-map []
   (let [bsonTypeClassMap (bson-type-class-map)]
     (reify CodecProvider
       (get [_ clazz registry]
@@ -86,7 +86,7 @@
                           acc        (assoc! acc field-name value)]
                       (recur acc))))))))))))
 
-(defn ^CodecProvider persistent-vector []
+(defn- ^CodecProvider persistent-vector []
   (let [bsonTypeClassMap (bson-type-class-map)]
     (reify CodecProvider
       (get [_ clazz registry]
@@ -118,7 +118,7 @@
       (getMethod "create" (into-array [IPersistentMap]))
       (invoke nil (into-array [map]))))
 
-(defn ^CodecProvider record []
+(defn- ^CodecProvider record []
   (reify CodecProvider
     (get [_ clazz registry]
       (let [map-codec (.get registry Map)]
@@ -132,7 +132,7 @@
               (let [m (.decode map-codec reader decoderContext)]
                 (map->record clazz m)))))))))
 
-(defn ^java.util.List providers []
+(defn- ^java.util.List providers []
   [(ValueCodecProvider.)
    (Jsr310CodecProvider.)
 
