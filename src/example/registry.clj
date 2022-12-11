@@ -62,7 +62,8 @@
     (reify CodecProvider
       (get [_ clazz registry]
         (let [bsonTypeCodecMap (BsonTypeCodecMap. bsonTypeClassMap registry)]
-          (when (.isAssignableFrom Map clazz)
+          (when (or (.isAssignableFrom Map clazz)
+                    (.isAssignableFrom IPersistentMap clazz))
             (reify Codec
               (getEncoderClass [_]
                 clazz)
@@ -121,7 +122,7 @@
 (defn- ^CodecProvider record []
   (reify CodecProvider
     (get [_ clazz registry]
-      (let [map-codec (.get registry Map)]
+      (let [map-codec (.get registry IPersistentMap)]
         (when (.isAssignableFrom IRecord clazz)
           (reify Codec
             (getEncoderClass [_]
