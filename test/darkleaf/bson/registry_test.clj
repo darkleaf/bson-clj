@@ -1,6 +1,6 @@
-(ns example.registry-test
+(ns darkleaf.bson.registry-test
   (:require
-   [example.registry :as sut]
+   [darkleaf.bson.registry :as sut]
    [clojure.test :as t])
   (:import
    (org.bson BsonBinaryWriter BsonBinaryReader)

@@ -1,4 +1,4 @@
-(ns example.registry
+(ns darkleaf.bson.registry
   (:import
    (org.bson.codecs.configuration CodecRegistry CodecRegistries)
    (org.bson.codecs.configuration CodecProvider)
