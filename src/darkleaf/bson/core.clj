@@ -134,13 +134,16 @@
     (toBsonDocument [_ _ codec-registry]
       (BsonDocumentWrapper/asBsonDocument x codec-registry))))
 
-#_(codec-registry :base (MongoClientSettings/getDefaultCodecRegistry)
-                  :class-map {BsonType/DATE_TIME ...})
+#_(-clj-codec-registry {BsonType/DATE_TIME Instant})
+(defn ^CodecRegistry -clj-codec-registry []
+  (let [class-map (bson-type-class-map)]
+    (CodecRegistries/fromProviders
+     (List/of (persistent-map class-map)
+              (persistent-vector class-map)))))
+
+;; а может оно и не нужно и Bson/DEFAULT_CODEC_REGISTRY достаточно
+#_(MongoClientSettings/getDefaultCodecRegistry)
 (defn ^CodecRegistry codec-registry []
-  (let [java-registry Bson/DEFAULT_CODEC_REGISTRY
-        class-map     (bson-type-class-map)
-        clj-registry  (CodecRegistries/fromProviders
-                       (List/of (persistent-map class-map)
-                                (persistent-vector class-map)))]
-    (CodecRegistries/fromRegistries (List/of clj-registry
-                                             java-registry))))
+  (CodecRegistries/fromRegistries
+   (List/of (-clj-codec-registry)
+            Bson/DEFAULT_CODEC_REGISTRY)))

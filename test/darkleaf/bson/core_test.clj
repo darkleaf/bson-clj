@@ -1,4 +1,4 @@
-(ns darkleaf.bson.registry-test
+(ns darkleaf.bson.core-test
   (:require
    [darkleaf.bson.core :as bson]
    [clojure.test :as t])
@@ -59,7 +59,6 @@
       #_{:foo (Binary. bar-bytes)}
       {:foo (ObjectId/get)}
       #_(->Test 1 2))))
-
 
 (t/deftest roundtip-changing-type
   (let [registry (bson/codec-registry)]
