@@ -2,7 +2,7 @@
   (:import
    (java.time Instant)
    (java.util Map List)
-   (clojure.lang IPersistentMap Sequential)
+   (clojure.lang IPersistentMap IPersistentVector)
    (org.bson
     BsonDocumentWrapper
     BsonType
@@ -20,7 +20,7 @@
 (defn- ^BsonTypeClassMap bson-type-class-map []
   (BsonTypeClassMap.
    {BsonType/DOCUMENT  IPersistentMap
-    BsonType/ARRAY     Sequential
+    BsonType/ARRAY     IPersistentVector
     BsonType/DATE_TIME Instant}))
 
 (defn- write-value [^BsonWriter writer
@@ -79,11 +79,13 @@
                         acc        (assoc! acc field-name value)]
                     (recur acc)))))))))))
 
+;; list, seq, cons and etc go to the java-registry as Iterable
+
 (defn- ^CodecProvider persistent-vector [bsonTypeClassMap]
   (reify CodecProvider
     (get [_ clazz registry]
       (let [bsonTypeCodecMap (BsonTypeCodecMap. bsonTypeClassMap registry)]
-        (when (.isAssignableFrom Sequential clazz)
+        (when (.isAssignableFrom IPersistentVector clazz)
           (reify Codec
             (getEncoderClass [_]
               clazz)

@@ -70,6 +70,12 @@
       {:foo 1/2}
       {:foo 0.5}
 
+      {:foo #{1}}
+      {:foo [1]}
+
+      {:foo #{{:a 1}}}
+      {:foo [{:a 1}]}
+
       (Map/of "bar" "buzz")
       {:bar "buzz"}
 
