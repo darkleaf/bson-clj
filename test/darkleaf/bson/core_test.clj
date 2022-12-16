@@ -35,6 +35,7 @@
 #_(defrecord Test [a b])
 
 (def ^{:tag 'bytes} bar-bytes (.getBytes "bar"))
+(def inst (Instant/parse "2022-12-10T16:31:00Z"))
 
 (t/deftest roundtrip
   (let [registry (bson/codec-registry)]
@@ -56,8 +57,9 @@
       {:foo [{:a 2}]}
       {:foo (list)}
       {:foo (list 1 2 3)}
-      {:foo (Instant/parse "2022-12-10T16:31:00Z")}
-      #_{:foo (Binary. bar-bytes)}
+      {:foo inst}
+      {:foo [inst inst]}
+      {:foo (Binary. bar-bytes)}
       {:foo (ObjectId/get)}
       #_(->Test 1 2))))
 
