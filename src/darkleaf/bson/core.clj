@@ -35,14 +35,11 @@
 (defn- read-value [^BsonReader reader
                    ^BsonTypeCodecMap bsonTypeCodecMap
                    ^DecoderContext decoderContext]
-  (let [bsonType  (.getCurrentBsonType reader)]
+  (let [bsonType (.getCurrentBsonType reader)]
     (if (= bsonType BsonType/NULL)
-      (do
-        (.readNull reader)
-        nil)
-      (let [codec (.get bsonTypeCodecMap bsonType)
-            value (.decode codec reader decoderContext)]
-        value))))
+      (.readNull reader)
+      (let [codec (.get bsonTypeCodecMap bsonType)]
+        (.decode codec reader decoderContext)))))
 
 (defn- write-name [^BsonWriter writer name]
   (.writeName writer (-> name symbol str)))

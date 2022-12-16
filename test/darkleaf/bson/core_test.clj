@@ -43,6 +43,7 @@
                                  (bson-write registry)
                                  (bson-read (class v#) registry)))))
       {}
+      {:foo nil}
       {:foo true}
       {:foo/bar true}
       {:foo "bar"}
