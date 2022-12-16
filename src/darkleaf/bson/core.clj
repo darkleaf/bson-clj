@@ -52,8 +52,8 @@
               (vec (.decode codec r ctx)))))))))
 
 ;; todo: interactive development and record class reloading
-(defn- map->record [^Class class ^IPersistentMap map]
-  (.. class
+(defn- map->record [^Class clazz ^IPersistentMap map]
+  (.. clazz
       (getMethod "create" (into-array [IPersistentMap]))
       (invoke nil (into-array [map]))))
 
