@@ -1,6 +1,6 @@
 (ns darkleaf.bson.registry-test
   (:require
-   [darkleaf.bson.registry :as sut]
+   [darkleaf.bson.core :as bson]
    [clojure.test :as t])
   (:import
    (org.bson BsonBinaryWriter BsonBinaryReader)
@@ -32,12 +32,12 @@
         codec (.get registry class)]
     (.decode codec r ctx)))
 
-(defrecord Test [a b])
+#_(defrecord Test [a b])
 
 (def ^{:tag 'bytes} bar-bytes (.getBytes "bar"))
 
 (t/deftest roundtrip
-  (let [registry (sut/registry)]
+  (let [registry (bson/codec-registry)]
     (t/are [v] (let [v# v]
                  (t/is (= v# (-> v#
                                  (bson-write registry)
@@ -56,12 +56,13 @@
       {:foo (list)}
       {:foo (list 1 2 3)}
       {:foo (Instant/parse "2022-12-10T16:31:00Z")}
-      {:foo (Binary. bar-bytes)}
+      #_{:foo (Binary. bar-bytes)}
       {:foo (ObjectId/get)}
-      (->Test 1 2))))
+      #_(->Test 1 2))))
+
 
 (t/deftest roundtip-changing-type
-  (let [registry (sut/registry)]
+  (let [registry (bson/codec-registry)]
     (t/are [from to] (t/is (= to (-> from
                                      (bson-write registry)
                                      (bson-read (class to) registry))))
