@@ -3,7 +3,7 @@
    (clojure.lang IPersistentMap IPersistentVector IRecord)
    (java.time Instant)
    (java.util Map List)
-   (org.bson BsonDocumentWrapper BsonType)
+   (org.bson BsonDocumentWrapper BsonType UuidRepresentation)
    (org.bson.codecs Codec BsonTypeClassMap
                     BsonCodecProvider
                     BsonValueCodecProvider
@@ -98,4 +98,6 @@
                    (Jsr310CodecProvider.)
                    (JsonObjectCodecProvider.)
                    (BsonCodecProvider.)]]
-    (CodecRegistries/fromProviders ^List providers)))
+    (-> ^List providers
+        (CodecRegistries/fromProviders)
+        (CodecRegistries/withUuidRepresentation UuidRepresentation/STANDARD))))

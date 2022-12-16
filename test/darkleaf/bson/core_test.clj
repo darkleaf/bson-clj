@@ -36,6 +36,7 @@
 
 (def ^{:tag 'bytes} bar-bytes (.getBytes "bar"))
 (def inst (Instant/parse "2022-12-10T16:31:00Z"))
+(def uuid (random-uuid))
 
 (t/deftest roundtrip
   (let [registry (bson/codec-registry)]
@@ -60,6 +61,7 @@
       {:foo inst}
       {:foo [inst inst]}
       {:foo (list inst inst)}
+      {:foo uuid}
       {:foo (Binary. bar-bytes)}
       {:foo (ObjectId/get)}
       (->Test 1 2)
