@@ -32,7 +32,7 @@
         codec (.get registry class)]
     (.decode codec r ctx)))
 
-#_(defrecord Test [a b])
+(defrecord Test [a b])
 
 (def ^{:tag 'bytes} bar-bytes (.getBytes "bar"))
 (def inst (Instant/parse "2022-12-10T16:31:00Z"))
@@ -59,9 +59,12 @@
       {:foo (list 1 2 3)}
       {:foo inst}
       {:foo [inst inst]}
+      {:foo (list inst inst)}
       {:foo (Binary. bar-bytes)}
       {:foo (ObjectId/get)}
-      #_(->Test 1 2))))
+      (->Test 1 2)
+      (->Test 1 inst)
+      (->Test 1 [inst]))))
 
 (t/deftest roundtip-changing-type
   (let [registry (bson/codec-registry)]
@@ -72,8 +75,14 @@
       {:foo 1/2}
       {:foo 0.5}
 
+      {"foo" 1}
+      {:foo 1}
+
       {:foo #{1}}
       {:foo [1]}
+
+      {:foo #{inst}}
+      {:foo [inst]}
 
       {:foo #{{:a 1}}}
       {:foo [{:a 1}]}
