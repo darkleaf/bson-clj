@@ -18,12 +18,6 @@
 
 (set! *warn-on-reflection* true)
 
-(defn- ^BsonTypeClassMap bson-type-class-map []
-  (BsonTypeClassMap.
-   {BsonType/DOCUMENT  IPersistentMap
-    BsonType/ARRAY     IPersistentVector
-    BsonType/DATE_TIME Instant}))
-
 (defn- map-key->str [x]
   (-> x symbol str))
 
@@ -76,6 +70,12 @@
             (decode [_ r ctx]
               (let [m (.decode codec r ctx)]
                 (map->record clazz m)))))))))
+
+(defn- ^BsonTypeClassMap bson-type-class-map []
+  (BsonTypeClassMap.
+   {BsonType/DOCUMENT  IPersistentMap
+    BsonType/ARRAY     IPersistentVector
+    BsonType/DATE_TIME Instant}))
 
 (defn ^Bson ->bson [x]
   (reify Bson
