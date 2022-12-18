@@ -1,6 +1,6 @@
-(ns darkleaf.bson.core-test
+(ns darkleaf.bson-clj.core-test
   (:require
-   [darkleaf.bson.core :as bson]
+   [darkleaf.bson-clj.core :as bson]
    [clojure.test :as t])
   (:import
    (org.bson BsonBinaryWriter BsonBinaryReader)

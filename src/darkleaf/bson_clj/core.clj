@@ -1,4 +1,4 @@
-(ns darkleaf.bson.core
+(ns darkleaf.bson-clj.core
   (:import
    (clojure.lang IPersistentMap IPersistentVector IRecord)
    (java.time Instant)

@@ -1,4 +1,4 @@
-(ns darkleaf.bson.persistent-map-test
+(ns darkleaf.bson-clj.persistent-map-test
   (:require
    [clojure.test :as t]
    [darkleaf.bson.core :as bson])
