@@ -9,6 +9,7 @@
    (com.mongodb.client.gridfs.model GridFSUploadOptions)
    (java.io ByteArrayInputStream)
    (java.util Map)
+   (org.bson.json JsonObject)
    (org.bson.types ObjectId)))
 
 (set! *warn-on-reflection* true)
@@ -38,6 +39,19 @@
           filter (bson/->bson {:_id id})
           doc    (.findOneAndDelete coll filter)]
       (t/is (= "bar" (doc :foo))))))
+
+(t/deftest json-test
+  (with-open [client (MongoClients/create mongo-uri)]
+    (let [db     (.. client
+                     (getDatabase "test")
+                     (withCodecRegistry (bson/codec-registry)))
+          coll   (.getCollection db "map-test" JsonObject)
+          id     (ObjectId.)
+          _      (.insertOne coll {:_id id :foo (JsonObject. "{\"bar\": 42}")})
+          filter (bson/->bson {:_id id})
+          doc    (.findOneAndDelete coll filter)]
+      (t/is (= (JsonObject. (str "{\"_id\": {\"$oid\": \"" id "\"}, \"foo\": {\"bar\": 42}}"))
+               doc)))))
 
 #_
 (t/deftest grid-fs-test
