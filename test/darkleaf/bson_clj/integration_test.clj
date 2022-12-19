@@ -13,7 +13,8 @@
 
 (set! *warn-on-reflection* true)
 
-(def ^String mongo-uri "mongodb://root:example@localhost:27017")
+(def mongo-host (or (System/getenv "MONGO_HOST") "localhost"))
+(def ^String mongo-uri (str "mongodb://root:example@" mongo-host ":27017"))
 
 (t/deftest java-map-test
   (with-open [client (MongoClients/create mongo-uri)]
