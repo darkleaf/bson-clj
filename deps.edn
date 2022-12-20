@@ -2,9 +2,10 @@
  :aliases
  {:dev
   {:extra-paths ["test"]
-   :extra-deps  {org.mongodb/mongodb-driver-sync {:mvn/version "4.8.1"}
-                 org.slf4j/slf4j-simple          {:mvn/version "1.7.36"}}}
+   :extra-deps  {org.mongodb/mongodb-driver-sync      {:mvn/version "4.8.1"}
+                 org.slf4j/slf4j-simple               {:mvn/version "1.7.36"}
+                 io.github.cognitect-labs/test-runner {:git/tag "v0.5.1"
+                                                       :git/sha "dfb30dd"}}}
   :test
-  {:extra-deps {io.github.cognitect-labs/test-runner {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
-   :main-opts  ["-m" "cognitect.test-runner"]
+  {:main-opts  ["-m" "cognitect.test-runner"]
    :exec-fn    cognitect.test-runner.api/test}}}
